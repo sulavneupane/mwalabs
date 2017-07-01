@@ -1,0 +1,17 @@
+1. In the case of setTimeout, the event loop has to pass through timers queue performing any operations specific to each phase before executing callback, whereas in the case of setImmediate it goes to checks queue of event loop, if all I/O events in the current snapshot are processed, it executes the callback. So, setImmediate has higher probability to execute before setTimeout because of which we want sometimes to use setImmediate instead of using setTimeout.
+
+
+2. process.nextTick() is not the part of event loop, it adds the callback into the nextTick queue whereas setImmediate() is the part of event loop which has to pass through timers queue. The nextTick queue is like priority queue whose all callback functions are executed before executing the callback functions of event loop queue. Hence, process.nextTick() is always processed before processing setImmediate().
+
+
+3. Ten global modules available in Node environment are:
+i. global
+ii. module
+iii. process
+iv. buffer
+v. console
+vi. require()
+vii. setInterval()
+viii. setTimeout()
+ix. setImmediate()
+x. clearInterval()
