@@ -6,7 +6,7 @@ html(lang="en")
     body
         h1 Welcome to #{title}
 
-        h2 Users Retrieval with node-fetch module using Promises
+        h2 #{table_title1}
         div
             table
                 thead
@@ -32,8 +32,7 @@ html(lang="en")
                             td: !{user.address.geo.lat}
                             td: !{user.address.geo.lng}
                             td: !{user.website}
-
-        h2 Users Retrieval with node-fetch module using Reactive Programming (Observables)
+        h2 #{table_title2}
         div
             table
                 thead
@@ -59,8 +58,7 @@ html(lang="en")
                             td: !{user.address.geo.lat}
                             td: !{user.address.geo.lng}
                             td: !{user.website}
-
-        h2 Users Retrieval with node-fetch module using Async Await
+        h2 #{table_title3}
         div
             table
                 thead

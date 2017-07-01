@@ -4,60 +4,63 @@ var Rx = require('@reactivex/rxjs');
 var router = express.Router();
 
 /* GET users listing with node-fetch using Promises. */
+let renderData = {title: "User Management System"};
+
+// Fetching data with node-fetch using Promises
 router.get('/', function (req, res, next) {
 
-    fetchAndUpdate(req, res);
+    const dataPromise = fetch('http://jsonplaceholder.typicode.com/users/');
+    dataPromise.then(response => response.json())
+        .then(data => {
+            renderData.table_title1 = "Fetching data with node-fetch using Promises";
+            renderData.usersListPromises = data;
+            next();
+        })
+        .catch(err => res.end(err));
 
-    // fetch('http://jsonplaceholder.typicode.com/users/')
-    //     .then(function (result) {
-    //         return result.json();
-    //     }).then(function (json) {
-    //     res.render('users', {title: "User Management System", usersListPromises: json});
-    // }).catch(function (error) {
-    //     console.log(error);
-    // });
-
-    //res.send('respond with a resource');
 });
 
-let data = {
-    title: "User Management System"
-};
+// Fetching data with node-fetch using Reactive Programming (Observables)
+router.get('/', function (req, res, next) {
 
-const fetchDataUsingPromise = new Promise(function (resolve, reject) {
-    fetch('http://jsonplaceholder.typicode.com/users/')
-        .then(response => resolve(response.json()));
-});
+    const dataPromise = fetch('http://jsonplaceholder.typicode.com/users/');
+    const dataObservable = Rx.Observable.fromPromise(dataPromise);
+    dataObservable.subscribe(promiseResponse => {
+        promiseResponse.json().then(data => {
+            renderData.table_title2 = "Fetching data with node-fetch using Reactive Programming (Observables)";
+            renderData.usersListObservables = data;
 
-const fetchDataUsingObservables = new Promise(function (resolve, reject) {
-    const dataObservable = new Rx.Subject();
-    dataObservable.subscribe(value => {
-        console.log(value);
-        data.usersListObservables = value;
-        resolve();
+            next();
+
+        }).catch(err => {
+            res.end(err);
+        });
+    }, err => {
+        res.end(err);
     });
 
-    fetch('http://jsonplaceholder.typicode.com/users/')
-        .then(response => dataObservable.next(response.json()));
 });
 
-async function fetchAndUpdate(req, res) {
+// Fetching data with node-fetch using Asyns/Await
+router.get('/', async function (req, res, next) {
+    const dataPromise = fetch('http://jsonplaceholder.typicode.com/users/');
+
     try {
-        data.usersListPromises = await fetchDataUsingPromise;
-        await fetchDataUsingObservables;
-        data.usersListAsyncAwait = await fetchDataUsingPromise;
+        let promiseResponse = await dataPromise;
 
-        //console.log(data);
+        promiseResponse.json().then(data => {
+            renderData.table_title3 = "Fetching data with node-fetch using Async/Await";
+            renderData.usersListAsyncAwait = data;
 
-        res.render('users', data);
+            res.render('users', renderData);
+        }).catch(err => {
+            res.end(err);
+        });
 
-    } catch (error) {
-        data.usersListPromises = error;
-        data.usersListObservables = error;
-        res.render('users', data);
+    } catch (err) {
+        res.end(err);
 
     }
-}
-
+});
 
 module.exports = router;
