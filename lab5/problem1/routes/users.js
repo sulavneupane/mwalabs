@@ -24,15 +24,16 @@ router.get('/', function (req, res, next) {
 router.get('/', function (req, res, next) {
 
     const dataPromise = fetch('http://jsonplaceholder.typicode.com/users/');
-    const dataObservable = Rx.Observable.fromPromise(dataPromise);
-    dataObservable.subscribe(promiseResponse => {
-        promiseResponse.json().then(data => {
+    const jsonObservable = Rx.Observable.fromPromise(dataPromise);
+    jsonObservable.subscribe(promiseResponse => {
+
+        const dataObservable = Rx.Observable.fromPromise(promiseResponse.json());
+        dataObservable.subscribe(data => {
             renderData.table_title2 = "Fetching data with node-fetch using Reactive Programming (Observables)";
             renderData.usersListObservables = data;
 
             next();
-
-        }).catch(err => {
+        }, err => {
             res.end(err);
         });
     }, err => {
@@ -47,15 +48,12 @@ router.get('/', async function (req, res, next) {
 
     try {
         let promiseResponse = await dataPromise;
+        let data = await promiseResponse.json();
 
-        promiseResponse.json().then(data => {
-            renderData.table_title3 = "Fetching data with node-fetch using Async/Await";
-            renderData.usersListAsyncAwait = data;
+        renderData.table_title3 = "Fetching data with node-fetch using Async/Await";
+        renderData.usersListAsyncAwait = data;
 
-            res.render('users', renderData);
-        }).catch(err => {
-            res.end(err);
-        });
+        res.render('users', renderData);
 
     } catch (err) {
         res.end(err);
