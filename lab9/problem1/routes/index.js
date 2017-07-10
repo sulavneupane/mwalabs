@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 
     // Find all the zip codes with a population less than 1000.
     db.lab9.aggregate([
-        {$match: {$and: [{'state': 'IA'}, {'pop': {$lt: 1000}}]}},
+        {$match: {'pop': {$lt: 1000}}},
         {$project: {'_id': 0, 'zipcode': '$_id', 'pop': 1}}
     ], function (err, data) {
         console.log(data);
