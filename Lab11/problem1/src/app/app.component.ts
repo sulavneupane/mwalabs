@@ -7,14 +7,13 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
-  componentCounterValue: number;
+  parentCounterValue: number;
 
   constructor() {
-    this.componentCounterValue = 0;
   }
 
   counterValueChanged(value: number): void {
-    this.componentCounterValue = value;
+    this.parentCounterValue = value;
   }
 
 }
