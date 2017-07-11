@@ -22,7 +22,7 @@ import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 })
 export class CounterComponent implements OnInit {
 
-  @Input('parentCounterValue') counterValue: number;
+  @Input('ComponentCounterValue') counterValue: number;
   OnCounterChange: EventEmitter<number>;
 
   constructor() {
