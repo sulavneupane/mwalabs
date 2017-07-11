@@ -6,7 +6,7 @@ import {Component, EventEmitter, Input, OnInit} from '@angular/core';
     <div>
       <!--<input type="number" (input)="setCounterValue($event)" value="{{counterValue}}"/>-->
       <button (click)="decrementCounter()">-</button>
-      <span>{{counter}}</span>
+      <span>{{counterValue}}</span>
       <button (click)="incrementCounter()">+</button>
     </div>
   `,
@@ -22,7 +22,7 @@ import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 })
 export class Counter implements OnInit {
 
-  @Input('ComponentCounterValue') counter: number;
+  @Input('ComponentCounterValue') counterValue: number;
   OnCounterChange: EventEmitter<number>;
 
   constructor() {
@@ -30,19 +30,19 @@ export class Counter implements OnInit {
   }
 
   incrementCounter(): boolean {
-    this.counter = this.counter + 1;
+    this.counterValue = this.counterValue + 1;
     this.emitCounterValue();
     return false;
   }
 
   decrementCounter(): boolean {
-    this.counter = this.counter - 1;
+    this.counterValue = this.counterValue - 1;
     this.emitCounterValue();
     return false;
   }
 
   emitCounterValue() {
-    this.OnCounterChange.emit(this.counter);
+    this.OnCounterChange.emit(this.counterValue);
   }
 
   ngOnInit() {
