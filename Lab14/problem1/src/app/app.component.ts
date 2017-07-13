@@ -1,17 +1,20 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from "@angular/forms";
 import {MyService} from "app/my.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+
   private postForm: FormGroup;
   private name: AbstractControl;
   private email: AbstractControl;
   private post: AbstractControl;
+  private subscription: Subscription;
 
   private formData: object = {
     name: '',
@@ -32,7 +35,7 @@ export class AppComponent {
   }
 
   retrieveData() {
-    this.dataService.getData().subscribe(results => {
+    this.subscription = this.dataService.getData().subscribe(results => {
       this.formData['name'] = results[0].name;
       this.formData['email'] = results[0].email;
       this.formData['post'] = results[1][Math.floor(Math.random() * results[1].length)].title;
@@ -41,5 +44,9 @@ export class AppComponent {
 
   onSubmit() {
     console.log(this.formData);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
